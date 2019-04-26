@@ -6,7 +6,6 @@
 -- |
 -- Module      :  Data.Multimap.Set
 -- Maintainer  :  Ziyang Liu <free@cofree.io>
--- Stability   :  experimental
 --
 -- Multimaps, where values behave like (non empty) sets.
 --

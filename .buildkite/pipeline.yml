@@ -1,4 +1,4 @@
 steps:
   - label: Build and test
-    command: "stack test"
+    command: "stack build && stack exec test-gen && stack test"
     branches: "master"

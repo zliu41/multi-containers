@@ -5,8 +5,7 @@
 -- |
 -- Module      :  Data.Multimap.Table
 -- Maintainer  :  Ziyang Liu <free@cofree.io>
--- Stability   :  experimental
-
+--
 -- The @'Table' r c a@ type represents a finite two-dimensional table
 -- that associates a pair of keys (a row key of type @r@ and
 -- a column key of type @c@) with a value of type @a@.

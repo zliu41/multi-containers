@@ -6,7 +6,6 @@
 -- |
 -- Module      :  Data.Multimap
 -- Maintainer  :  Ziyang Liu <free@cofree.io>
--- Stability   :  experimental
 --
 -- Multimaps, where values behave like (non empty) lists.
 --
@@ -224,15 +223,22 @@ instance (Ord k) => Monoid (Multimap k v) where
 ------------------------------------------------------------------------------
 
 -- | /O(1)/. The empty multimap.
+--
+-- > size empty == 0
 empty :: Multimap k a
 empty = Multimap (Map.empty, 0)
 
 -- | /O(1)/. A multimap with a single element.
+--
+-- > singleton 1 'a' == fromList [(1, 'a')]
+-- > size (singleton 1 'a') == 1
 singleton :: k -> a -> Multimap k a
 singleton k a = Multimap (Map.singleton k (pure a), 1)
 
 -- | /O(n*log n)/ where /n/ is the length of the input list.
 --  Build a multimap from a list of key\/value pairs.
+--
+-- > fromList ([] :: [(Int, Char)]) == empty
 fromList :: Ord k => [(k, a)] -> Multimap k a
 fromList = Foldable.foldr (uncurry insert) empty
 
@@ -242,6 +248,8 @@ fromMap m = Multimap (m, sum (fmap length m))
 
 -- | /O(k)/. A key is retained only if it is associated with a
 -- non-empty list of values.
+--
+-- > fromMap' (Map.fromList [(1, "ab"), (2, ""), (3, "c")]) == fromList [(1, 'a'), (1, 'b'), (3, 'c')]
 fromMap' :: Map k [a] -> Multimap k a
 fromMap' m = Multimap (Map.mapMaybe nonEmpty m, sum (fmap length m))
 
@@ -330,6 +338,8 @@ lookup k (Multimap (m, _)) = maybe [] Nel.toList (Map.lookup k m)
 
 -- | /O(log k)/. Lookup the values at a key in the map. It returns an empty
 -- list if the key is not in the map.
+--
+-- > fromList [(3, 'a'), (5, 'b'), (3, 'c')] ! 3 == "ac"
 (!) :: Ord k => Multimap k a -> k -> [a]
 (!) = flip lookup
 
