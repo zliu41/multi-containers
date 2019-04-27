@@ -21,8 +21,7 @@ description:         Please see the README on GitHub at <https://github.com/zliu
 
 dependencies:
   - base >= 4.7 && < 5
-  - containers
-  - extra
+  - containers >= 0.5.10.2 && < 0.7
 
 library:
   source-dirs: src
@@ -32,7 +31,8 @@ executables:
     main: Main.hs
     source-dirs: test-gen
     dependencies:
-      - filepath
+      - extra >= 1.6.9 && < 1.7
+      - filepath >= 1.4.1.2 && < 1.5
 
 tests:
   hspec:
@@ -43,5 +43,5 @@ tests:
       - -rtsopts
       - -with-rtsopts=-N
     dependencies:
-      - hspec
+      - hspec >= 2.4.8 && < 2.8
       - multi-containers

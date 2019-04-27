@@ -127,7 +127,6 @@ import qualified Data.Map as Map
 import qualified Data.Maybe as Maybe
 import           Data.Semigroup (Semigroup, (<>))
 import           Data.Set (Set)
-import           Data.Tuple.Extra (uncurry3)
 
 import Prelude hiding (filter, foldl, foldr, lookup, map, null)
 
@@ -164,6 +163,7 @@ instance (Ord r, Ord c) => Semigroup (Table r c a) where
 
 instance (Ord r, Ord c) => Monoid (Table r c a) where
   mempty = empty
+  mappend = (<>)
 
 ------------------------------------------------------------------------------
 
@@ -627,3 +627,6 @@ transpose = Map.foldrWithKey' f Map.empty
 
 size' :: Map k1 (Map k2 a) -> Int
 size' = sum . fmap Map.size
+
+uncurry3 :: (a -> b -> c -> d) -> (a, b, c) -> d
+uncurry3 f ~(a, b, c) = f a b c

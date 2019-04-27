@@ -200,6 +200,7 @@ instance (Ord k, Ord a) => Semigroup (SetMultimap k a) where
 
 instance (Ord k, Ord a) => Monoid (SetMultimap k a) where
   mempty = empty
+  mappend = (<>)
 
 ------------------------------------------------------------------------------
 

@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1bec565eeeddaaf7b747a57d59b144213d38e77777388764d6fec983a003c63c
+-- hash: ac90048e6c03004cbdfe3dd0520e37ec21d1e4df33d7deecb17cf794bcc444e5
 
 name:           multi-containers
 version:        0.1.0.0
@@ -37,8 +37,7 @@ library
       src
   build-depends:
       base >=4.7 && <5
-    , containers
-    , extra
+    , containers >=0.5.10.2 && <0.7
   default-language: Haskell2010
 
 executable test-gen
@@ -49,9 +48,9 @@ executable test-gen
       test-gen
   build-depends:
       base >=4.7 && <5
-    , containers
-    , extra
-    , filepath
+    , containers >=0.5.10.2 && <0.7
+    , extra >=1.6.9 && <1.7
+    , filepath >=1.4.1.2 && <1.5
   default-language: Haskell2010
 
 test-suite hspec
@@ -65,8 +64,7 @@ test-suite hspec
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
-    , containers
-    , extra
-    , hspec
+    , containers >=0.5.10.2 && <0.7
+    , hspec >=2.4.8 && <2.8
     , multi-containers
   default-language: Haskell2010

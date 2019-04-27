@@ -219,6 +219,7 @@ instance (Ord k) => Semigroup (Multimap k a) where
 
 instance (Ord k) => Monoid (Multimap k a) where
   mempty = empty
+  mappend = (<>)
 
 ------------------------------------------------------------------------------
 
