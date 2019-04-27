@@ -2,11 +2,13 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 75f73e60c7a46f9cbea5731f323ac8a65e150269ef2233ae0ea00e2c87219c04
+-- hash: 1bec565eeeddaaf7b747a57d59b144213d38e77777388764d6fec983a003c63c
 
 name:           multi-containers
 version:        0.1.0.0
+synopsis:       A few variants of multimaps.
 description:    Please see the README on GitHub at <https://github.com/zliu41/multi-containers#readme>
+category:       Data Structures
 homepage:       https://github.com/zliu41/multi-containers#readme
 bug-reports:    https://github.com/zliu41/multi-containers/issues
 author:         Ziyang Liu
