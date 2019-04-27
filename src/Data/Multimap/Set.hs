@@ -145,7 +145,7 @@ import           Data.Functor.Classes
 import           Data.Map.Lazy (Map)
 import qualified Data.Map.Lazy as Map
 import qualified Data.Maybe as Maybe
-import           Data.Semigroup ((<>))
+import           Data.Semigroup (Semigroup, (<>))
 import           Data.Set (Set)
 import qualified Data.Set as Set
 
@@ -195,10 +195,10 @@ instance Foldable.Foldable (SetMultimap k) where
   foldMap = foldMapWithKey . const
   {-# INLINE foldMap #-}
 
-instance (Ord k, Ord v) => Semigroup (SetMultimap k v) where
+instance (Ord k, Ord a) => Semigroup (SetMultimap k a) where
   (<>) = union
 
-instance (Ord k, Ord v) => Monoid (SetMultimap k v) where
+instance (Ord k, Ord a) => Monoid (SetMultimap k a) where
   mempty = empty
 
 ------------------------------------------------------------------------------

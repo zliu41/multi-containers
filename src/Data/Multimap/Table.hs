@@ -125,6 +125,7 @@ import qualified Data.Foldable as Foldable
 import           Data.Map (Map)
 import qualified Data.Map as Map
 import qualified Data.Maybe as Maybe
+import           Data.Semigroup (Semigroup, (<>))
 import           Data.Set (Set)
 import           Data.Tuple.Extra (uncurry3)
 
@@ -157,6 +158,12 @@ instance Foldable.Foldable (Table r c) where
 instance Ord c => Traversable (Table r c) where
   traverse = traverseWithKeys . const . const
   {-# INLINE traverse #-}
+
+instance (Ord r, Ord c) => Semigroup (Table r c a) where
+  (<>) = union
+
+instance (Ord r, Ord c) => Monoid (Table r c a) where
+  mempty = empty
 
 ------------------------------------------------------------------------------
 

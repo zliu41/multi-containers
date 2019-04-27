@@ -149,7 +149,7 @@ import qualified Data.List.NonEmpty as Nel
 import           Data.Map.Lazy (Map)
 import qualified Data.Map.Lazy as Map
 import qualified Data.Maybe as Maybe
-import           Data.Semigroup ((<>))
+import           Data.Semigroup (Semigroup, (<>))
 import           Data.Set (Set)
 
 import Prelude hiding (filter, foldl, foldr, lookup, map, null)
@@ -214,10 +214,10 @@ instance Traversable (Multimap k) where
   traverse = traverseWithKey . const
   {-# INLINE traverse #-}
 
-instance (Ord k) => Semigroup (Multimap k v) where
+instance (Ord k) => Semigroup (Multimap k a) where
   (<>) = union
 
-instance (Ord k) => Monoid (Multimap k v) where
+instance (Ord k) => Monoid (Multimap k a) where
   mempty = empty
 
 ------------------------------------------------------------------------------
