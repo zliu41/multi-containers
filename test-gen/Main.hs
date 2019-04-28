@@ -1,10 +1,10 @@
-{-# OPTIONS_GHC -w #-}
-
 module Main (main) where
 
-import Data.List.Extra (dropEnd, dropWhileEnd, intercalate, isPrefixOf, isSuffixOf, replace, stripPrefix, trim)
+import Data.List.Extra (replace, stripPrefix, trim)
 import Data.Maybe (mapMaybe)
 import System.FilePath
+
+import Prelude hiding (mod)
 
 main :: IO ()
 main = do
@@ -16,23 +16,8 @@ genTestsFor mod = do
       outputFile = "test/hspec" </> (replace "." [pathSeparator] mod ++ "Spec.hs")
   src <- readFile inputFile
   let lns = fmap trim (lines src)
-      tests = fmap (replace "==" "`shouldBe`") . mapMaybe (stripPrefix "-- > ") $ lns
+      tests = mapMaybe (stripPrefix "-- > ") lns
   writeFile outputFile . unlines $ header mod ++ fmap (indent 6) tests
-
-exported :: [String] -> [String]
-exported = fmap dropParens
-         . words . dropEnd 1 . dropWhileEnd (/= ')') . drop 1 . dropWhile (/= '(')
-         . replace "," " " . unlines
-         . filter (not . ("--" `isPrefixOf`))
-         . dropWhile (not . ("module" `isPrefixOf`))
-         . takeUntil ("where" `isSuffixOf`)
-
-takeUntil :: (a -> Bool) -> [a] -> [a]
-takeUntil p = foldr (\x ys -> x : if p x then [] else ys) []
-
-dropParens :: String -> String
-dropParens s@('(' : _) | last s == ')' = drop 1 (dropEnd 1 s)
-dropParens s = s
 
 header :: String -> [String]
 header mod =
@@ -42,9 +27,14 @@ header mod =
   , "module Data.MultimapSpec where"
   , ""
   , "import Test.Hspec"
+  , "import qualified Data.List.NonEmpty as NonEmpty"
   , "import qualified Data.Map as Map"
+  , "import qualified Data.Set as Set"
   ] ++ ["import " ++ mod] ++
   [ ""
+  , "(===) :: (HasCallStack, Show a, Eq a) => a -> a -> Expectation"
+  , "(===) = shouldBe"
+  , ""
   , "spec :: Spec"
   , "spec = do"
   , "  describe \"Testing " ++ mod ++ "\" $ do"
