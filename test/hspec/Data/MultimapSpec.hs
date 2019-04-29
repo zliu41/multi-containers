@@ -30,16 +30,17 @@ spec = do
       deleteWithValue 1 'c' (fromList [(2, 'c'), (1, 'c')]) === singleton 2 'c'
       deleteOne 1 (fromList [(1, 'a'), (1, 'b'), (2, 'c')]) === fromList [(1, 'b'), (2, 'c')]
       deleteOne 1 (fromList [(2, 'c'), (1, 'c')]) === singleton 2 'c'
-      adjust ("new " ++) 1 (fromList [(1, "a"), (1, "b"), (2, "c")]) === fromList [(1, "new a"), (1, "new b"), (2, "c")]
-      adjustWithKey (\k x -> show k ++ ":new " ++ x) 1 (fromList [(1, "a"), (1, "b"), (2, "c")]) === fromList [(1, "1:new a"), (1, "1:new b"), (2, "c")]
+      adjust ("new " ++) 1 (fromList [(1,"a"),(1,"b"),(2,"c")]) === fromList [(1,"new a"),(1,"new b"),(2,"c")]
+      adjustWithKey (\k x -> show k ++ ":new " ++ x) 1 (fromList [(1,"a"),(1,"b"),(2,"c")])
+        === fromList [(1,"1:new a"),(1,"1:new b"),(2,"c")]
       let f x = if x == "a" then Just "new a" else Nothing in do
-        update f 1 (fromList [(1, "a"), (1, "b"), (2, "c")]) === fromList [(1, "new a"), (2, "c")]
-        update f 1 (fromList [(1, "b"), (1, "b"), (2, "c")]) === singleton 2 "c"
+        update f 1 (fromList [(1,"a"),(1, "b"),(2,"c")]) === fromList [(1,"new a"),(2, "c")]
+        update f 1 (fromList [(1,"b"),(1, "b"),(2,"c")]) === singleton 2 "c"
       update' NonEmpty.tail 1 (fromList [(1, "a"), (1, "b"), (2, "c")]) === fromList [(1, "b"), (2, "c")]
       update' NonEmpty.tail 1 (fromList [(1, "a"), (2, "b")]) === singleton 2 "b"
       let f k x = if x == "a" then Just (show k ++ ":new a") else Nothing in do
-        updateWithKey f 1 (fromList [(1, "a"), (1, "b"), (2, "c")]) === fromList [(1, "1:new a"), (2, "c")]
-        updateWithKey f 1 (fromList [(1, "b"), (1, "b"), (2, "c")]) === singleton 2 "c"
+        updateWithKey f 1 (fromList [(1,"a"),(1,"b"),(2,"c")]) === fromList [(1,"1:new a"),(2,"c")]
+        updateWithKey f 1 (fromList [(1,"b"),(1,"b"),(2,"c")]) === singleton 2 "c"
       let f k xs = if NonEmpty.length xs == 1 then (show k : NonEmpty.toList xs) else [] in do
         updateWithKey' f 1 (fromList [(1, "a"), (1, "b"), (2, "c")]) === singleton 2 "c"
         updateWithKey' f 1 (fromList [(1, "a"), (2, "b"), (2, "c")]) === fromList [(1, "1"), (1, "a"), (2, "b"), (2, "c")]
@@ -54,6 +55,7 @@ spec = do
         alterWithKey g 1 (fromList [(1, "a"), (2, "b")]) === fromList [(1, "1"), (1, "a"), (2, "b")]
         alterWithKey g 3 (fromList [(1, "a"), (2, "b")]) === fromList [(1, "a"), (2, "b"), (3, "3")]
       fromList [(3, 'a'), (5, 'b'), (3, 'c')] ! 3 === "ac"
+      fromList [(3, 'a'), (5, 'b'), (3, 'c')] ! 2 === []
       member 1 (fromList [(1, 'a'), (2, 'b'), (2, 'c')]) === True
       member 1 (deleteOne 1 (fromList [(2, 'c'), (1, 'c')])) === False
       notMember 1 (fromList [(1, 'a'), (2, 'b'), (2, 'c')]) === False
@@ -65,22 +67,25 @@ spec = do
       size empty === 0
       size (singleton 1 'a') === 1
       size (fromList [(1, 'a'), (2, 'b'), (2, 'c')]) === 3
-      union (fromList [(1, 'a'), (2, 'b'), (2, 'c')]) (fromList [(1, 'd'), (2, 'b')]) === (fromList [(1, 'a'), (1, 'd'), (2, 'b'), (2, 'c'), (2, 'b')])
-      unions [fromList [(1, 'a'), (2, 'b'), (2, 'c')], fromList [(1, 'd'), (2, 'b')]] === (fromList [(1, 'a'), (1, 'd'), (2, 'b'), (2, 'c'), (2, 'b')])
-      difference (fromList [(1, 'a'), (2, 'b'), (2, 'c'), (2, 'b')]) (fromList [(1, 'd'), (2, 'b'), (2, 'a')]) === fromList [(1, 'a'), (2, 'c'), (2, 'b')]
-      Data.Multimap.map (++ "x") (fromList [(1, "a"), (1, "a"), (2, "b")]) === fromList [(1, "ax"), (1, "ax"), (2, "bx")]
-      mapWithKey (\k x -> show k ++ ":" ++ x) (fromList [(1, "a"), (1, "a"), (2, "b")]) === fromList [(1, "1:a"), (1, "1:a"), (2, "2:b")]
+      union (fromList [(1,'a'),(2,'b'),(2,'c')]) (fromList [(1,'d'),(2,'b')])
+        === fromList [(1,'a'),(1,'d'),(2,'b'),(2,'c'),(2,'b')]
+      unions [fromList [(1,'a'),(2,'b'),(2,'c')], fromList [(1,'d'),(2,'b')]]
+        === fromList [(1,'a'),(1,'d'),(2,'b'),(2,'c'),(2,'b')]
+      difference (fromList [(1,'a'),(2,'b'),(2,'c'),(2,'b')]) (fromList [(1,'d'),(2,'b'),(2,'a')])
+        === fromList [(1,'a'), (2,'c'), (2,'b')]
+      Data.Multimap.map (++ "x") (fromList [(1,"a"),(1,"a"),(2,"b")]) === fromList [(1,"ax"),(1,"ax"),(2,"bx")]
+      mapWithKey (\k x -> show k ++ ":" ++ x) (fromList [(1,"a"),(1,"a"),(2,"b")]) === fromList [(1,"1:a"),(1,"1:a"),(2,"2:b")]
       let f k a = if odd k then Just (succ a) else Nothing in do
         traverseWithKey f (fromList [(1, 'a'), (1, 'b'), (3, 'b'), (3, 'c')]) === Just (fromList [(1, 'b'), (1, 'c'), (3, 'c'), (3, 'd')])
         traverseWithKey f (fromList [(1, 'a'), (1, 'b'), (2, 'b')]) === Nothing
       Data.Multimap.foldr ((+) . length) 0 (fromList [(1, "hello"), (1, "world"), (2, "!")]) === 11
       Data.Multimap.foldl (\len -> (+ len) . length) 0 (fromList [(1, "hello"), (1, "world"), (2, "!")]) === 11
-      Data.Multimap.foldrWithKey (\k a len -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
-      Data.Multimap.foldlWithKey (\len k a -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
+      foldrWithKey (\k a len -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
+      foldlWithKey (\len k a -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
       Data.Multimap.foldr' ((+) . length) 0 (fromList [(1, "hello"), (1, "world"), (2, "!")]) === 11
       Data.Multimap.foldl' (\len -> (+ len) . length) 0 (fromList [(1, "hello"), (1, "world"), (2, "!")]) === 11
-      Data.Multimap.foldrWithKey' (\k a len -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
-      Data.Multimap.foldlWithKey' (\len k a -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
+      foldrWithKey' (\k a len -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
+      foldlWithKey' (\len k a -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
       foldMapWithKey (\k x -> show k ++ ":" ++ x) (fromList [(1, "a"), (1, "a"), (2, "b")]) === "1:a1:a2:b"
       elems (fromList [(2, 'a'), (1, 'b'), (3, 'c'), (1, 'b')]) === "bbac"
       elems (empty :: Multimap Int Char) === []

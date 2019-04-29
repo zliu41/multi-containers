@@ -2,6 +2,7 @@ module Main (main) where
 
 import Data.List.Extra (replace, stripPrefix, trim)
 import Data.Maybe (mapMaybe)
+import System.Directory
 import System.FilePath
 
 import Prelude hiding (mod)
@@ -9,12 +10,14 @@ import Prelude hiding (mod)
 main :: IO ()
 main = do
   genTestsFor "Data.Multimap"
+  genTestsFor "Data.Multimap.Set"
 
 genTestsFor :: String -> IO ()
 genTestsFor mod = do
   let inputFile = "src" </> replace "." [pathSeparator] mod <.> "hs"
       outputFile = "test/hspec" </> (replace "." [pathSeparator] mod ++ "Spec.hs")
   src <- readFile inputFile
+  createDirectoryIfMissing True (takeDirectory outputFile)
   let lns = fmap trim (lines src)
       tests = mapMaybe (stripPrefix "-- > ") lns
   writeFile outputFile . unlines $ header mod ++ fmap (indent 6) tests
@@ -24,7 +27,7 @@ header mod =
   [ "-- Generated code, do not modify by hand. Generate by running \"stack build && stack exec test-gen\"."
   , ""
   , "{-# OPTIONS_GHC -w #-}"
-  , "module Data.MultimapSpec where"
+  , "module " ++ mod ++ "Spec where"
   , ""
   , "import Test.Hspec"
   , "import qualified Data.List.NonEmpty as NonEmpty"

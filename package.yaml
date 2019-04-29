@@ -32,6 +32,7 @@ executables:
     source-dirs: test-gen
     dependencies:
       - extra >= 1.6.9 && < 1.7
+      - directory >= 1.3.0.2 && < 1.4
       - filepath >= 1.4.1.2 && < 1.5
 
 tests:

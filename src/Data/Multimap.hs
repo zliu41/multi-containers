@@ -296,14 +296,15 @@ deleteOne = update' Nel.tail
 -- | /O(m*log k)/, assuming the function @a -> a@ takes /O(1)/.
 -- Update values at a specific key, if exists.
 --
--- > adjust ("new " ++) 1 (fromList [(1, "a"), (1, "b"), (2, "c")]) === fromList [(1, "new a"), (1, "new b"), (2, "c")]
+-- > adjust ("new " ++) 1 (fromList [(1,"a"),(1,"b"),(2,"c")]) === fromList [(1,"new a"),(1,"new b"),(2,"c")]
 adjust :: Ord k => (a -> a) -> k -> Multimap k a -> Multimap k a
 adjust = adjustWithKey . const
 
 -- | /O(m*log k)/, assuming the function @k -> a -> a@ takes /O(1)/.
 -- Update values at a specific key, if exists.
 --
--- > adjustWithKey (\k x -> show k ++ ":new " ++ x) 1 (fromList [(1, "a"), (1, "b"), (2, "c")]) === fromList [(1, "1:new a"), (1, "1:new b"), (2, "c")]
+-- > adjustWithKey (\k x -> show k ++ ":new " ++ x) 1 (fromList [(1,"a"),(1,"b"),(2,"c")])
+-- >   === fromList [(1,"1:new a"),(1,"1:new b"),(2,"c")]
 adjustWithKey :: Ord k => (k -> a -> a) -> k -> Multimap k a -> Multimap k a
 adjustWithKey f k (Multimap (m, sz)) = Multimap (m', sz)
   where
@@ -314,8 +315,8 @@ adjustWithKey f k (Multimap (m, sz)) = Multimap (m', sz)
 -- exists. If @f@ returns 'Nothing' for a value, the value is deleted.
 --
 -- > let f x = if x == "a" then Just "new a" else Nothing in do
--- >   update f 1 (fromList [(1, "a"), (1, "b"), (2, "c")]) === fromList [(1, "new a"), (2, "c")]
--- >   update f 1 (fromList [(1, "b"), (1, "b"), (2, "c")]) === singleton 2 "c"
+-- >   update f 1 (fromList [(1,"a"),(1, "b"),(2,"c")]) === fromList [(1,"new a"),(2, "c")]
+-- >   update f 1 (fromList [(1,"b"),(1, "b"),(2,"c")]) === singleton 2 "c"
 update :: Ord k => (a -> Maybe a) -> k -> Multimap k a -> Multimap k a
 update = updateWithKey . const
 
@@ -333,8 +334,8 @@ update' = updateWithKey' . const
 -- exists. If @f@ returns 'Nothing' for a value, the value is deleted.
 --
 -- > let f k x = if x == "a" then Just (show k ++ ":new a") else Nothing in do
--- >   updateWithKey f 1 (fromList [(1, "a"), (1, "b"), (2, "c")]) === fromList [(1, "1:new a"), (2, "c")]
--- >   updateWithKey f 1 (fromList [(1, "b"), (1, "b"), (2, "c")]) === singleton 2 "c"
+-- >   updateWithKey f 1 (fromList [(1,"a"),(1,"b"),(2,"c")]) === fromList [(1,"1:new a"),(2,"c")]
+-- >   updateWithKey f 1 (fromList [(1,"b"),(1,"b"),(2,"c")]) === singleton 2 "c"
 updateWithKey :: Ord k => (k -> a -> Maybe a) -> k -> Multimap k a -> Multimap k a
 updateWithKey f = alterWithKey (Maybe.mapMaybe . f)
 
@@ -386,6 +387,7 @@ lookup k (Multimap (m, _)) = maybe [] Nel.toList (Map.lookup k m)
 -- list if the key is not in the map.
 --
 -- > fromList [(3, 'a'), (5, 'b'), (3, 'c')] ! 3 === "ac"
+-- > fromList [(3, 'a'), (5, 'b'), (3, 'c')] ! 2 === []
 (!) :: Ord k => Multimap k a -> k -> [a]
 (!) = flip lookup
 
@@ -438,14 +440,16 @@ size (Multimap (_, sz)) = sz
 
 -- | Union two multimaps, concatenating values for duplicate keys.
 --
--- > union (fromList [(1, 'a'), (2, 'b'), (2, 'c')]) (fromList [(1, 'd'), (2, 'b')]) === (fromList [(1, 'a'), (1, 'd'), (2, 'b'), (2, 'c'), (2, 'b')])
+-- > union (fromList [(1,'a'),(2,'b'),(2,'c')]) (fromList [(1,'d'),(2,'b')])
+-- >   === fromList [(1,'a'),(1,'d'),(2,'b'),(2,'c'),(2,'b')]
 union :: Ord k => Multimap k a -> Multimap k a -> Multimap k a
 union (Multimap (m1, _)) (Multimap (m2, _)) =
   fromMap (Map.unionWith (<>) m1 m2)
 
 -- | Union a number of multimaps, concatenating values for duplicate keys.
 --
--- > unions [fromList [(1, 'a'), (2, 'b'), (2, 'c')], fromList [(1, 'd'), (2, 'b')]] === (fromList [(1, 'a'), (1, 'd'), (2, 'b'), (2, 'c'), (2, 'b')])
+-- > unions [fromList [(1,'a'),(2,'b'),(2,'c')], fromList [(1,'d'),(2,'b')]]
+-- >   === fromList [(1,'a'),(1,'d'),(2,'b'),(2,'c'),(2,'b')]
 unions :: (Foldable f, Ord k) => f (Multimap k a) -> Multimap k a
 unions = Foldable.foldr union empty
 
@@ -457,7 +461,8 @@ unions = Foldable.foldr union empty
 -- of each value in the second multimap is removed from the
 -- first multimap.
 --
--- > difference (fromList [(1, 'a'), (2, 'b'), (2, 'c'), (2, 'b')]) (fromList [(1, 'd'), (2, 'b'), (2, 'a')]) === fromList [(1, 'a'), (2, 'c'), (2, 'b')]
+-- > difference (fromList [(1,'a'),(2,'b'),(2,'c'),(2,'b')]) (fromList [(1,'d'),(2,'b'),(2,'a')])
+-- >   === fromList [(1,'a'), (2,'c'), (2,'b')]
 difference :: (Ord k, Eq a) => Multimap k a -> Multimap k a -> Multimap k a
 difference (Multimap (m1, _)) (Multimap (m2, _)) = fromMap $
   Map.differenceWith (\xs ys -> nonEmpty (Nel.toList xs List.\\ Nel.toList ys)) m1 m2
@@ -467,14 +472,14 @@ difference (Multimap (m1, _)) (Multimap (m2, _)) = fromMap $
 -- | /O(n)/, assuming the function @a -> b@ takes /O(1)/.
 -- Map a function over all values in the map.
 --
--- > Data.Multimap.map (++ "x") (fromList [(1, "a"), (1, "a"), (2, "b")]) === fromList [(1, "ax"), (1, "ax"), (2, "bx")]
+-- > Data.Multimap.map (++ "x") (fromList [(1,"a"),(1,"a"),(2,"b")]) === fromList [(1,"ax"),(1,"ax"),(2,"bx")]
 map :: (a -> b) -> Multimap k a -> Multimap k b
 map = mapWithKey . const
 
 -- | /O(n)/, assuming the function @k -> a -> b@ takes /O(1)/.
 -- Map a function over all key\/value pairs in the map.
 --
--- > mapWithKey (\k x -> show k ++ ":" ++ x) (fromList [(1, "a"), (1, "a"), (2, "b")]) === fromList [(1, "1:a"), (1, "1:a"), (2, "2:b")]
+-- > mapWithKey (\k x -> show k ++ ":" ++ x) (fromList [(1,"a"),(1,"a"),(2,"b")]) === fromList [(1,"1:a"),(1,"1:a"),(2,"2:b")]
 mapWithKey :: (k -> a -> b) -> Multimap k a -> Multimap k b
 mapWithKey f (Multimap (m, sz)) = Multimap (Map.mapWithKey (fmap . f) m, sz)
 
@@ -513,7 +518,7 @@ foldl = foldlWithKey . (const .)
 -- | /O(n)/. Fold the key\/value paris in the map using the given
 -- right-associative binary operator.
 --
--- > Data.Multimap.foldrWithKey (\k a len -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
+-- > foldrWithKey (\k a len -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
 foldrWithKey :: (k -> a -> b -> b) -> b -> Multimap k a -> b
 foldrWithKey f b (Multimap (m, _)) = Map.foldrWithKey f' b m
   where
@@ -522,7 +527,7 @@ foldrWithKey f b (Multimap (m, _)) = Map.foldrWithKey f' b m
 -- | /O(n)/. Fold the key\/value paris in the map using the given
 -- left-associative binary operator.
 --
--- > Data.Multimap.foldlWithKey (\len k a -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
+-- > foldlWithKey (\len k a -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
 foldlWithKey :: (a -> k -> b -> a) -> a -> Multimap k b -> a
 foldlWithKey f a (Multimap (m, _)) = Map.foldlWithKey f' a m
   where
@@ -548,7 +553,7 @@ foldl' = foldlWithKey' . (const .)
 -- operator is evaluated before using the result in the next application.
 -- This function is strict in the starting value.
 --
--- > Data.Multimap.foldrWithKey' (\k a len -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
+-- > foldrWithKey' (\k a len -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
 foldrWithKey' :: (k -> a -> b -> b) -> b -> Multimap k a -> b
 foldrWithKey' f b (Multimap (m, _)) = Map.foldrWithKey' f' b m
   where
@@ -558,7 +563,7 @@ foldrWithKey' f b (Multimap (m, _)) = Map.foldrWithKey' f' b m
 -- operator is evaluated before using the result in the next application.
 -- This function is strict in the starting value.
 --
--- > Data.Multimap.foldlWithKey' (\len k a -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
+-- > foldlWithKey' (\len k a -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
 foldlWithKey' :: (a -> k -> b -> a) -> a -> Multimap k b -> a
 foldlWithKey' f a (Multimap (m, _)) = Map.foldlWithKey' f' a m
   where
