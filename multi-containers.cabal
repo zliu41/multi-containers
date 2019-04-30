@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 283ae2cba093750ef3ead9d7157ad44d3836e8cfe1beff9800cdcb3047b885fb
+-- hash: ee8ee976df6098bafd1b84099c480eac4bab9fed793ae074100bd0ab676cdc17
 
 name:           multi-containers
 version:        0.1.0.0
@@ -59,6 +59,7 @@ test-suite hspec
   main-is: Main.hs
   other-modules:
       Data.Multimap.SetSpec
+      Data.Multimap.TableSpec
       Data.MultimapSpec
       Paths_multi_containers
   hs-source-dirs:

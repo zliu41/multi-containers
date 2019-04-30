@@ -11,6 +11,7 @@ main :: IO ()
 main = do
   genTestsFor "Data.Multimap"
   genTestsFor "Data.Multimap.Set"
+  genTestsFor "Data.Multimap.Table"
 
 genTestsFor :: String -> IO ()
 genTestsFor mod = do
