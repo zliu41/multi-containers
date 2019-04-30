@@ -24,6 +24,7 @@ spec = do
         === fromList [(1,'a',"b"),(1,'b',"c"),(2,'a',"d")]
       fromColumnMap (Map.fromList [(1, Map.fromList [('a',"b"),('b',"c")]), (2, Map.fromList [('a',"d")])])
         === fromList [('a',1,"b"),('a',2,"d"),('b',1,"c")]
+      transpose (fromList [(1,'a',"b"),(1,'b',"c"),(2,'a',"d")]) === fromList [('a',1,"b"),('a',2,"d"),('b',1,"c")]
       insert 1 'a' "a" empty === singleton 1 'a' "a"
       insert 1 'a' "a" (fromList [(1,'b',"c"),(2,'a',"d")]) === fromList [(1,'a',"a"),(1,'b',"c"),(2,'a',"d")]
       insert 1 'a' "a" (fromList [(1,'a',"b"),(1,'b',"c"),(2,'a',"d")]) === fromList [(1,'a',"a"),(1,'b',"c"),(2,'a',"d")]

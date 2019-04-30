@@ -13,6 +13,11 @@
 -- The implementation is backed by two maps: a @'Map' r ('Map' c) a@, and
 -- a @'Map' c ('Map' r) a@, called "row map" and "column map", respectively.
 --
+-- It is worth noting that all functions that traverse a table, such as
+-- 'foldl', 'foldr', 'foldMap' and 'traverse', are row-oriented, i.e.,
+-- they traverse the table row by row. To traverse a table column
+-- by column, 'transpose' the table first.
+--
 -- In the following Big-O notations, unless otherwise noted, /n/ denotes
 -- the size of the table (i.e., the total number of values for all
 -- row and column keys), /r/ denotes the number of row keys that has at
@@ -26,6 +31,7 @@ module Data.Multimap.Table (
   , singleton
   , fromRowMap
   , fromColumnMap
+  , transpose
 
   -- ** From Unordered Lists
   , fromList
@@ -191,7 +197,7 @@ fromList = Foldable.foldr (uncurry3 insert) empty
 -- > fromRowMap (Map.fromList [(1, Map.fromList [('a',"b"),('b',"c")]), (2, Map.fromList [('a',"d")])])
 -- >   === fromList [(1,'a',"b"),(1,'b',"c"),(2,'a',"d")]
 fromRowMap :: (Ord r, Ord c) => Map r (Map c a) -> Table r c a
-fromRowMap m = Table (m', transpose m', size' m')
+fromRowMap m = Table (m', transpose' m', size' m')
   where m' = nonEmpty m
 
 -- | Build a table from a column map.
@@ -199,8 +205,14 @@ fromRowMap m = Table (m', transpose m', size' m')
 -- > fromColumnMap (Map.fromList [(1, Map.fromList [('a',"b"),('b',"c")]), (2, Map.fromList [('a',"d")])])
 -- >   === fromList [('a',1,"b"),('a',2,"d"),('b',1,"c")]
 fromColumnMap :: (Ord r, Ord c) => Map c (Map r a) -> Table r c a
-fromColumnMap m = Table (transpose m', m', size' m')
+fromColumnMap m = Table (transpose' m', m', size' m')
   where m' = nonEmpty m
+
+-- | Flip the row and column keys.
+--
+-- > transpose (fromList [(1,'a',"b"),(1,'b',"c"),(2,'a',"d")]) === fromList [('a',1,"b"),('a',2,"d"),('b',1,"c")]
+transpose :: Table r c a -> Table c r a
+transpose (Table (rm, cm, sz)) = Table (cm, rm, sz)
 
 ------------------------------------------------------------------------------
 
@@ -498,7 +510,7 @@ traverseWithKeys
 traverseWithKeys f (Table (rm, _, _)) = fromMaps <$> rm' <*> cm'
   where
     rm' = Map.traverseWithKey (Map.traverseWithKey . f) rm
-    cm' = transpose <$> rm'
+    cm' = transpose' <$> rm'
 
 -- | Traverse the (row key, column key, value) triples and collect the 'Just' results.
 traverseMaybeWithKeys
@@ -509,7 +521,7 @@ traverseMaybeWithKeys
 traverseMaybeWithKeys f (Table (rm, _, _)) = fromMaps <$> rm' <*> cm'
   where
     rm' = Map.traverseWithKey (Map.traverseMaybeWithKey . f) rm
-    cm' = transpose <$> rm'
+    cm' = transpose' <$> rm'
 
 ------------------------------------------------------------------------------
 
@@ -805,8 +817,8 @@ nonEmpty' k1 m = case Map.lookup k1 m of
   Just m' | Map.null m' -> Map.delete k1 m
   _ -> m
 
-transpose :: (Ord r, Ord c) => Map r (Map c a) -> Map c (Map r a)
-transpose = Map.foldrWithKey' f Map.empty
+transpose' :: (Ord r, Ord c) => Map r (Map c a) -> Map c (Map r a)
+transpose' = Map.foldrWithKey' f Map.empty
   where
     f r = Map.unionWith Map.union . Map.map (Map.singleton r)
 
