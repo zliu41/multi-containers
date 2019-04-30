@@ -2,17 +2,17 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ee8ee976df6098bafd1b84099c480eac4bab9fed793ae074100bd0ab676cdc17
+-- hash: 9da8e5d6bcf046772035130681fc079404a33a3d4d63ac224b441b08ce7e0284
 
 name:           multi-containers
-version:        0.1.0.0
-synopsis:       A few variants of multimaps.
-description:    Please see the README on GitHub at <https://github.com/zliu41/multi-containers#readme>
+version:        0.1.0.1
+synopsis:       A few multimap variants.
+description:    A library that provides a few multimap variants.
 category:       Data Structures
 homepage:       https://github.com/zliu41/multi-containers#readme
 bug-reports:    https://github.com/zliu41/multi-containers/issues
-author:         Ziyang Liu
-maintainer:     free@cofree.io
+author:         Ziyang Liu <free@cofree.io>
+maintainer:     Ziyang Liu <free@cofree.io>
 copyright:      2019 Ziyang Liu
 license:        BSD3
 license-file:   LICENSE

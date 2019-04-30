@@ -1,9 +1,9 @@
 name:                multi-containers
-version:             0.1.0.0
+version:             0.1.0.1
 github:              "zliu41/multi-containers"
 license:             BSD3
-author:              "Ziyang Liu"
-maintainer:          "free@cofree.io"
+author:              "Ziyang Liu <free@cofree.io>"
+maintainer:          "Ziyang Liu <free@cofree.io>"
 copyright:           "2019 Ziyang Liu"
 
 extra-source-files:
@@ -11,13 +11,13 @@ extra-source-files:
   - ChangeLog.md
 
 # Metadata used when publishing your package
-synopsis:            A few variants of multimaps.
+synopsis:            A few multimap variants.
 category:            Data Structures
 
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/zliu41/multi-containers#readme>
+description:         A library that provides a few multimap variants.
 
 dependencies:
   - base >= 4.7 && < 5
