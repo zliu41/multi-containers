@@ -2,10 +2,10 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9da8e5d6bcf046772035130681fc079404a33a3d4d63ac224b441b08ce7e0284
+-- hash: 5c8d0a2541fa360ef1903f422222c873e84c5ea3b0fd709475a4ee54c843bbf8
 
 name:           multi-containers
-version:        0.1.0.1
+version:        0.1.0.2
 synopsis:       A few multimap variants.
 description:    A library that provides a few multimap variants.
 category:       Data Structures

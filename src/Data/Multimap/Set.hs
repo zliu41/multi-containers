@@ -266,7 +266,7 @@ deleteWithValue k a = alter (Set.delete a) k
 --
 -- > deleteMax 3 (fromList [(1,'a'),(1,'b'),(2,'c')]) === fromList [(1,'a'),(1,'b'),(2,'c')]
 -- > deleteMax 1 (fromList [(1,'a'),(1,'b'),(2,'c')]) === fromList [(1,'a'),(2,'c')]
-deleteMax :: (Ord k, Ord a) => k -> SetMultimap k a -> SetMultimap k a
+deleteMax :: Ord k => k -> SetMultimap k a -> SetMultimap k a
 deleteMax = alter Set.deleteMax
 
 -- | /O(log m * log k)/. Remove the minimal value
@@ -274,7 +274,7 @@ deleteMax = alter Set.deleteMax
 --
 -- > deleteMin 3 (fromList [(1,'a'),(1,'b'),(2,'c')]) === fromList [(1,'a'),(1,'b'),(2,'c')]
 -- > deleteMin 1 (fromList [(1,'a'),(1,'b'),(2,'c')]) === fromList [(1,'b'),(2,'c')]
-deleteMin :: (Ord k, Ord a) => k -> SetMultimap k a -> SetMultimap k a
+deleteMin :: Ord k => k -> SetMultimap k a -> SetMultimap k a
 deleteMin = alter Set.deleteMin
 
 -- | /O(m * log m * log k)/, assuming the function @a -> a@ takes /O(1)/.
