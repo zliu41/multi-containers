@@ -515,7 +515,7 @@ foldr = foldrWithKey . const
 foldl :: (a -> b -> a) -> a -> Multimap k b -> a
 foldl = foldlWithKey . (const .)
 
--- | /O(n)/. Fold the key\/value paris in the map using the given
+-- | /O(n)/. Fold the key\/value pairs in the map using the given
 -- right-associative binary operator.
 --
 -- > foldrWithKey (\k a len -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
@@ -524,7 +524,7 @@ foldrWithKey f b (Multimap (m, _)) = Map.foldrWithKey f' b m
   where
     f' = flip . Foldable.foldr . f
 
--- | /O(n)/. Fold the key\/value paris in the map using the given
+-- | /O(n)/. Fold the key\/value pairs in the map using the given
 -- left-associative binary operator.
 --
 -- > foldlWithKey (\len k a -> length (show k) + length a + len) 0 (fromList [(1, "hello"), (1, "world"), (20, "!")]) === 15
