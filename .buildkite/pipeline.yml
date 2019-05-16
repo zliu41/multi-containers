@@ -1,6 +1,6 @@
 steps:
-  - label: GHC 8.6.4
-    command: "stack build && stack exec test-gen && stack --resolver lts-13.18 test"
+  - label: GHC 8.6.5
+    command: "stack build && stack exec test-gen && stack --resolver lts-13.21 test"
     branches: "master"
 
   - label: GHC 8.4.4
