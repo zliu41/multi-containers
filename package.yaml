@@ -26,15 +26,6 @@ dependencies:
 library:
   source-dirs: src
 
-executables:
-  test-gen:
-    main: Main.hs
-    source-dirs: test-gen
-    dependencies:
-      - directory >= 1.3.0.2 && < 1.4
-      - extra >= 1.6.9 && < 1.7
-      - filepath >= 1.4.1.2 && < 1.5
-
 tests:
   hspec:
     main: Main.hs

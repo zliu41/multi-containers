@@ -1,4 +1,4 @@
-module Main (main) where
+module TestGen (main) where
 
 import Data.List.Extra (replace, stripPrefix, trim)
 import Data.Maybe (mapMaybe)
