@@ -1,8 +1,4 @@
--- This file has been generated from package.yaml by hpack version 0.28.2.
---
--- see: https://github.com/sol/hpack
---
--- hash: ca15420e8388cf1dfc2637048a14d4c3189aef093e04c9ca230ad95e14403c8c
+cabal-version:  2.4
 
 name:           multi-containers
 version:        0.1.0.2
@@ -13,11 +9,12 @@ homepage:       https://github.com/zliu41/multi-containers#readme
 bug-reports:    https://github.com/zliu41/multi-containers/issues
 author:         Ziyang Liu <free@cofree.io>
 maintainer:     Ziyang Liu <free@cofree.io>
-copyright:      2019 Ziyang Liu
-license:        BSD3
+copyright:      2019-2020 Ziyang Liu
+license:        BSD-3-Clause
 license-file:   LICENSE
 build-type:     Simple
-cabal-version:  >= 1.10
+tested-with:    GHC==8.8.1, GHC==8.6.5, GHC==8.4.4, GHC==8.2.2
+
 extra-source-files:
     ChangeLog.md
     README.md
@@ -35,6 +32,7 @@ library
       Paths_multi_containers
   hs-source-dirs:
       src
+  ghc-options: -Wall
   build-depends:
       base >=4.7 && <5
     , containers >=0.5.10.2 && <0.7
@@ -50,10 +48,11 @@ test-suite hspec
       Paths_multi_containers
   hs-source-dirs:
       test/hspec
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
     , containers >=0.5.10.2 && <0.7
     , hspec >=2.4.8 && <2.8
     , multi-containers
   default-language: Haskell2010
+  build-tool-depends: hspec-discover:hspec-discover == 2.*
