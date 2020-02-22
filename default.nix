@@ -9,7 +9,7 @@ let
       }:
       mkDerivation {
         pname = "multi-containers";
-        version = "0.1.0.2";
+        version = "0.1.1";
         src = ./.;
         libraryHaskellDepends = [ base containers ];
         testHaskellDepends = [ base containers hspec ];

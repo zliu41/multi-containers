@@ -135,6 +135,14 @@ module Data.Multimap (
   , mapMaybeWithKey
   , mapEither
   , mapEitherWithKey
+
+  -- * Min\/Max
+  , lookupMin
+  , lookupMax
+  , lookupLT
+  , lookupGT
+  , lookupLE
+  , lookupGE
   ) where
 
 import           Control.Arrow ((&&&))
@@ -150,7 +158,6 @@ import qualified Data.List.NonEmpty as Nel
 import           Data.Map.Lazy (Map)
 import qualified Data.Map.Lazy as Map
 import qualified Data.Maybe as Maybe
-import           Data.Semigroup (Semigroup, (<>))
 import           Data.Set (Set)
 
 import Prelude hiding (filter, foldl, foldr, lookup, map, null)
@@ -743,3 +750,55 @@ mapEitherWithKey f (Multimap (m, _)) =
       $ Map.mapWithKey g m
   where
     g k as = Either.partitionEithers $ fmap (f k) (Nel.toList as)
+
+------------------------------------------------------------------------------
+
+-- | /O(log n)/. Return the smallest key and the associated values. Returns 'Nothing'
+-- if the map is empty.
+--
+-- > lookupMin (fromList [(1,'a'),(1,'c'),(2,'c')]) === Just (1, NonEmpty.fromList "ac")
+-- > lookupMin (empty :: Multimap Int Char) === Nothing
+lookupMin :: Multimap k a -> Maybe (k, NonEmpty a)
+lookupMin (Multimap (m, _)) = Map.lookupMin m
+
+-- | /O(log n)/. Return the largest key and the associated values. Returns 'Nothing'
+-- if the map is empty.
+--
+-- > lookupMax (fromList [(1,'a'),(1,'c'),(2,'c')]) === Just (2, NonEmpty.fromList "c")
+-- > lookupMax (empty :: Multimap Int Char) === Nothing
+lookupMax :: Multimap k a -> Maybe (k, NonEmpty a)
+lookupMax (Multimap (m, _)) = Map.lookupMax m
+
+-- | /O(log n)/. Return the largest key smaller than the given one, and the associated
+-- values, if exist.
+--
+-- > lookupLT 1 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Nothing
+-- > lookupLT 4 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Just (3, NonEmpty.fromList "bc")
+lookupLT :: Ord k => k -> Multimap k a -> Maybe (k, NonEmpty a)
+lookupLT k (Multimap (m, _)) = Map.lookupLT k m
+
+-- | /O(log n)/. Return the smallest key larger than the given one, and the associated
+-- values, if exist.
+--
+-- > lookupGT 5 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Nothing
+-- > lookupGT 2 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Just (3, NonEmpty.fromList "bc")
+lookupGT :: Ord k => k -> Multimap k a -> Maybe (k, NonEmpty a)
+lookupGT k (Multimap (m, _)) = Map.lookupGT k m
+
+-- | /O(log n)/. Return the largest key smaller than or equal to the given one, and the associated
+-- values, if exist.
+--
+-- > lookupLE 0 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Nothing
+-- > lookupLE 1 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Just (1, NonEmpty.fromList "a")
+-- > lookupLE 4 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Just (3, NonEmpty.fromList "bc")
+lookupLE :: Ord k => k -> Multimap k a -> Maybe (k, NonEmpty a)
+lookupLE k (Multimap (m, _)) = Map.lookupLE k m
+
+-- | /O(log n)/. Return the smallest key larger than or equal to the given one, and the associated
+-- values, if exist.
+--
+-- > lookupGE 6 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Nothing
+-- > lookupGE 5 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Just (5, NonEmpty.fromList "c")
+-- > lookupGE 2 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Just (3, NonEmpty.fromList "bc")
+lookupGE :: Ord k => k -> Multimap k a -> Maybe (k, NonEmpty a)
+lookupGE k (Multimap (m, _)) = Map.lookupGE k m

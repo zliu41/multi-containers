@@ -115,3 +115,17 @@ spec = do
         === (fromList [(1,'a'),(2,'a')],fromList [(1,'c'),(2,'c')])
       mapEitherWithKey (\k a -> if even k && a < 'b' then Left a else Right a) (fromList [(1,'a'),(1,'c'),(2,'a'),(2,'c')])
         === (fromList [(2,'a')],fromList [(1,'a'),(1,'c'),(2,'c')])
+      lookupMin (fromList [(1,'a'),(1,'c'),(2,'c')]) === Just (1, Set.fromList "ac")
+      lookupMin (empty :: SetMultimap Int Char) === Nothing
+      lookupMax (fromList [(1,'a'),(1,'c'),(2,'c')]) === Just (2, Set.fromList "c")
+      lookupMax (empty :: SetMultimap Int Char) === Nothing
+      lookupLT 1 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Nothing
+      lookupLT 4 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Just (3, Set.fromList "bc")
+      lookupGT 5 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Nothing
+      lookupGT 2 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Just (3, Set.fromList "bc")
+      lookupLE 0 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Nothing
+      lookupLE 1 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Just (1, Set.fromList "a")
+      lookupLE 4 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Just (3, Set.fromList "bc")
+      lookupGE 6 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Nothing
+      lookupGE 5 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Just (5, Set.fromList "c")
+      lookupGE 2 (fromList [(1,'a'),(3,'b'),(3,'c'),(5,'c')]) === Just (3, Set.fromList "bc")

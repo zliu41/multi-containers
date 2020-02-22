@@ -131,7 +131,6 @@ import qualified Data.Foldable as Foldable
 import           Data.Map (Map)
 import qualified Data.Map as Map
 import qualified Data.Maybe as Maybe
-import           Data.Semigroup (Semigroup, (<>))
 import           Data.Set (Set)
 
 import Prelude hiding (filter, foldl, foldr, lookup, map, null)

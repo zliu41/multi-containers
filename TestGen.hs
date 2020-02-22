@@ -1,3 +1,7 @@
+#!/usr/bin/env stack
+-- stack --resolver lts-15.0 script --package filepath --package directory --package extra
+-- To run: ./TestGen.hs
+
 module TestGen (main) where
 
 import Data.List.Extra (replace, stripPrefix, trim)
