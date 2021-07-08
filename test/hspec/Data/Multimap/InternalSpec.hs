@@ -1,20 +1,20 @@
 -- Generated code, do not modify by hand. Generate by running "stack build && stack exec test-gen".
 
 {-# OPTIONS_GHC -w #-}
-module Data.MultimapSpec where
+module Data.Multimap.InternalSpec where
 
 import Test.Hspec
 import qualified Data.List.NonEmpty as NonEmpty
 import qualified Data.Map as Map
 import qualified Data.Set as Set
-import Data.Multimap
+import Data.Multimap.Internal as Data.Multimap
 
 (===) :: (HasCallStack, Show a, Eq a) => a -> a -> Expectation
 (===) = shouldBe
 
 spec :: Spec
 spec = do
-  describe "Testing Data.Multimap" $ do
+  describe "Testing Data.Multimap.Internal" $ do
     it "" $ do
       size empty === 0
       singleton 1 'a' === fromList [(1, 'a')]
