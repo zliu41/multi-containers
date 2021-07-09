@@ -1,5 +1,8 @@
 # Changelog for multi-containers
 
+- Add Internal modules that export data constructors
+- Add conversion functions between Multimap and SetMultimap
+
 ## 0.1.1
 
 - Add min/max functions for `Data.Multimap` and `Data.Multimap.Set`.
