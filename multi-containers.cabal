@@ -9,7 +9,7 @@ homepage:       https://github.com/zliu41/multi-containers#readme
 bug-reports:    https://github.com/zliu41/multi-containers/issues
 author:         Ziyang Liu <free@cofree.io>
 maintainer:     Ziyang Liu <free@cofree.io>
-copyright:      2019-2020 Ziyang Liu
+copyright:      2019-2021 Ziyang Liu
 license:        BSD-3-Clause
 license-file:   LICENSE
 build-type:     Simple
