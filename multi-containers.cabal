@@ -31,6 +31,7 @@ library
       Data.Multimap.Set.Internal
       Data.Multimap.Table
       Data.Multimap.Table.Internal
+      Data.Multimap.Conversion
   other-modules:
       Paths_multi_containers
   autogen-modules:
@@ -47,9 +48,12 @@ test-suite hspec
   type: exitcode-stdio-1.0
   main-is: Main.hs
   other-modules:
+      Data.MultimapSpec
       Data.Multimap.InternalSpec
+      Data.Multimap.SetSpec
       Data.Multimap.Set.InternalSpec
       Data.Multimap.Table.InternalSpec
+      Data.Multimap.ConversionSpec
       Paths_multi_containers
   autogen-modules:
       Paths_multi_containers
