@@ -1,7 +1,7 @@
 cabal-version:  2.4
 
 name:           multi-containers
-version:        0.1.1
+version:        0.2
 synopsis:       A few multimap variants.
 description:    A library that provides a few multimap variants.
 category:       Data Structures

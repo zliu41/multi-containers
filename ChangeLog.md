@@ -1,5 +1,7 @@
 # Changelog for multi-containers
 
+## 0.2
+
 - Add Internal modules that export data constructors
 - Add conversion functions between Multimap and SetMultimap
 

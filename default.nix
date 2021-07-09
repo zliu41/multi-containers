@@ -4,20 +4,19 @@ let
 
   inherit (nixpkgs) pkgs;
 
-  f = { mkDerivation, base, containers, hspec, hspec-discover
-      , stdenv
-      }:
+  f = { mkDerivation, base, containers, hspec, hspec-discover, lib }:
       mkDerivation {
         pname = "multi-containers";
-        version = "0.1.1";
+        version = "0.2";
         src = ./.;
         libraryHaskellDepends = [ base containers ];
         testHaskellDepends = [ base containers hspec ];
         testToolDepends = [ hspec-discover ];
         homepage = "https://github.com/zliu41/multi-containers#readme";
         description = "A few multimap variants";
-        license = stdenv.lib.licenses.bsd3;
+        license = lib.licenses.bsd3;
       };
+
 
   haskellPackages = if compiler == "default"
                        then pkgs.haskellPackages
