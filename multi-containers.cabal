@@ -26,8 +26,11 @@ source-repository head
 library
   exposed-modules:
       Data.Multimap
+      Data.Multimap.Internal
       Data.Multimap.Set
+      Data.Multimap.Set.Internal
       Data.Multimap.Table
+      Data.Multimap.Table.Internal
   other-modules:
       Paths_multi_containers
   autogen-modules:
@@ -44,9 +47,9 @@ test-suite hspec
   type: exitcode-stdio-1.0
   main-is: Main.hs
   other-modules:
-      Data.Multimap.SetSpec
-      Data.Multimap.TableSpec
-      Data.MultimapSpec
+      Data.Multimap.InternalSpec
+      Data.Multimap.Set.InternalSpec
+      Data.Multimap.Table.InternalSpec
       Paths_multi_containers
   autogen-modules:
       Paths_multi_containers

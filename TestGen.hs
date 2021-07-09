@@ -1,8 +1,9 @@
-#!/usr/bin/env stack
--- stack --resolver lts-15.0 script --package filepath --package directory --package extra
--- To run: ./TestGen.hs
-
-module TestGen (main) where
+#!/usr/bin/env cabal
+{- cabal:
+build-depends: base, directory, extra, filepath
+-}
+-- To run: `./TestGen.hs` or `cabal v2-run TestGen.hs`
+module Main (main) where
 
 import Data.List.Extra (replace, stripPrefix, trim)
 import Data.Maybe (mapMaybe)
@@ -13,22 +14,22 @@ import Prelude hiding (mod)
 
 main :: IO ()
 main = do
-  genTestsFor "Data.Multimap"
-  genTestsFor "Data.Multimap.Set"
-  genTestsFor "Data.Multimap.Table"
+  genTestsFor "Data.Multimap.Internal" "Data.Multimap"
+  genTestsFor "Data.Multimap.Set.Internal" "Data.Multimap.Set"
+  genTestsFor "Data.Multimap.Table.Internal" "Data.Multimap.Table"
 
-genTestsFor :: String -> IO ()
-genTestsFor mod = do
+genTestsFor :: String -> String -> IO ()
+genTestsFor mod as = do
   let inputFile = "src" </> replace "." [pathSeparator] mod <.> "hs"
       outputFile = "test/hspec" </> (replace "." [pathSeparator] mod ++ "Spec.hs")
   src <- readFile inputFile
   createDirectoryIfMissing True (takeDirectory outputFile)
   let lns = fmap trim (lines src)
       tests = mapMaybe (stripPrefix "-- > ") lns
-  writeFile outputFile . unlines $ header mod ++ fmap (indent 6) tests
+  writeFile outputFile . unlines $ header mod as ++ fmap (indent 6) tests
 
-header :: String -> [String]
-header mod =
+header :: String -> String -> [String]
+header mod as =
   [ "-- Generated code, do not modify by hand. Generate by running \"stack build && stack exec test-gen\"."
   , ""
   , "{-# OPTIONS_GHC -w #-}"
@@ -38,7 +39,7 @@ header mod =
   , "import qualified Data.List.NonEmpty as NonEmpty"
   , "import qualified Data.Map as Map"
   , "import qualified Data.Set as Set"
-  ] ++ ["import " ++ mod] ++
+  ] ++ ["import " ++ mod ++ " as " ++ as] ++
   [ ""
   , "(===) :: (HasCallStack, Show a, Eq a) => a -> a -> Expectation"
   , "(===) = shouldBe"
