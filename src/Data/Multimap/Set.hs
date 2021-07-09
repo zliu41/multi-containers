@@ -118,6 +118,11 @@ module Data.Multimap.Set (
   -- ** Maps
   , toMap
 
+  -- ** Multimaps
+  , fromMultimap
+  , toMultimapAsc
+  , toMultimapDesc
+
   -- * Filter
   , filter
   , filterWithKey
@@ -139,5 +144,13 @@ module Data.Multimap.Set (
   , lookupGE
   ) where
 
+import Data.Multimap.Conversion
+import Data.Multimap.Internal (Multimap)
 import Data.Multimap.Set.Internal
 import Prelude hiding (filter, foldl, foldr, lookup, map, null)
+
+-- | Convert a t'Data.Multimap.Multimap' to a t'Data.Multimap.Set.SetMultimap'.
+--
+-- > fromMultimap (Data.Multimap.fromList [(1,'a'),(1,'b'),(2,'c')]) === Data.Multimap.Set.fromList [(1,'a'),(1,'b'),(2,'c')]
+fromMultimap :: Ord a => Multimap k a -> SetMultimap k a
+fromMultimap = toSetMultimap

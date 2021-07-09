@@ -120,6 +120,11 @@ module Data.Multimap (
   -- ** Maps
   , toMap
 
+  -- ** SetMultimaps
+  , fromSetMultimapAsc
+  , fromSetMultimapDesc
+  , toSetMultimap
+
   -- * Filter
   , filter
   , filterWithKey
@@ -141,5 +146,21 @@ module Data.Multimap (
   , lookupGE
   ) where
 
+import Data.Multimap.Conversion
 import Data.Multimap.Internal
+import Data.Multimap.Set.Internal (SetMultimap)
 import Prelude hiding (filter, foldl, foldr, lookup, map, null)
+
+-- | Convert a t'Data.Multimap.Set.SetMultimap' to a t'Data.Multimap.Multimap' where the values of each key
+-- are in ascending order.
+--
+-- > fromSetMultimapAsc (Data.Multimap.Set.fromList [(1,'a'),(1,'b'),(2,'c')]) === Data.Multimap.fromList [(1,'a'),(1,'b'),(2,'c')]
+fromSetMultimapAsc :: SetMultimap k a -> Multimap k a
+fromSetMultimapAsc = toMultimapAsc
+
+-- | Convert a t'Data.Multimap.Set.SetMultimap' to a t'Data.Multimap.Multimap' where the values of each key
+-- are in descending order.
+--
+-- > fromSetMultimapDesc (Data.Multimap.Set.fromList [(1,'a'),(1,'b'),(2,'c')]) === Data.Multimap.fromList [(1,'b'),(1,'a'),(2,'c')]
+fromSetMultimapDesc :: SetMultimap k a -> Multimap k a
+fromSetMultimapDesc = toMultimapDesc
