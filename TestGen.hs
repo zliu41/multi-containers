@@ -50,7 +50,7 @@ genTestsFor mod imports = do
 
 header :: String -> Imports -> [String]
 header mod imports =
-  [ "-- Generated code, do not modify by hand. Generate by running \"stack build && stack exec test-gen\"."
+  [ "-- Generated code, do not modify by hand. Generate by running TestGen.hs."
   , ""
   , "{-# OPTIONS_GHC -w #-}"
   , "module " ++ mod ++ "Spec where"
