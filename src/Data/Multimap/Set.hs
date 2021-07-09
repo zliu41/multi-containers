@@ -144,7 +144,7 @@ module Data.Multimap.Set (
   , lookupGE
   ) where
 
-import Data.Multimap.Conversion
+import Data.Multimap.Conversions
 import Data.Multimap.Internal (Multimap)
 import Data.Multimap.Set.Internal
 import Prelude hiding (filter, foldl, foldr, lookup, map, null)

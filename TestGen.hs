@@ -33,8 +33,8 @@ main = do
     [("Data.Multimap.Set.Internal", "Data.Multimap.Set", Unqualified)]
   genTestsFor "Data.Multimap.Table.Internal"
     [("Data.Multimap.Table.Internal", "Data.Multimap.Table", Unqualified)]
-  genTestsFor "Data.Multimap.Conversion"
-    [("Data.Multimap.Conversion", "Data.Multimap.Conversion", Unqualified),
+  genTestsFor "Data.Multimap.Conversions"
+    [("Data.Multimap.Conversions", "Data.Multimap.Conversions", Unqualified),
      ("Data.Multimap.Internal", "Data.Multimap", Qualified),
      ("Data.Multimap.Set.Internal", "Data.Multimap.Set", Qualified)]
 

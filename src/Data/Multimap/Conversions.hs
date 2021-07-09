@@ -1,10 +1,10 @@
 -----------------------------------------------------------------------------
 -- |
--- Module      :  Data.Multimap.Conversion
+-- Module      :  Data.Multimap.Conversions
 -- Maintainer  :  Ziyang Liu <free@cofree.io>
 --
--- Conversion between 'Multimap' and 'SetMultimap'.
-module Data.Multimap.Conversion (
+-- Conversions between 'Multimap' and 'SetMultimap'.
+module Data.Multimap.Conversions (
   toMultimapAsc
   , toMultimapDesc
   , toSetMultimap

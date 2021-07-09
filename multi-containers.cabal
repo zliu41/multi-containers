@@ -31,7 +31,7 @@ library
       Data.Multimap.Set.Internal
       Data.Multimap.Table
       Data.Multimap.Table.Internal
-      Data.Multimap.Conversion
+      Data.Multimap.Conversions
   other-modules:
       Paths_multi_containers
   autogen-modules:
@@ -53,7 +53,7 @@ test-suite hspec
       Data.Multimap.SetSpec
       Data.Multimap.Set.InternalSpec
       Data.Multimap.Table.InternalSpec
-      Data.Multimap.ConversionSpec
+      Data.Multimap.ConversionsSpec
       Paths_multi_containers
   autogen-modules:
       Paths_multi_containers
