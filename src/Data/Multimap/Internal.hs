@@ -121,6 +121,7 @@ import           Control.Monad (join)
 import qualified Control.Monad as List (filterM)
 import           Data.Data (Data)
 import qualified Data.Either as Either
+import           Data.Foldable (Foldable)
 import qualified Data.Foldable as Foldable
 import           Data.Functor.Classes
 import qualified Data.List as List
@@ -131,7 +132,7 @@ import qualified Data.Map.Lazy as Map
 import qualified Data.Maybe as Maybe
 import           Data.Set (Set)
 
-import Prelude hiding (filter, foldl, foldr, lookup, map, null)
+import Prelude hiding (Foldable(..), filter, lookup, map)
 
 infixl 9 !
 
@@ -224,14 +225,14 @@ fromList = Foldable.foldr (uncurry insert) empty
 
 -- | /O(1)/.
 fromMap :: Map k (NonEmpty a) -> Multimap k a
-fromMap m = Multimap (m, sum (fmap length m))
+fromMap m = Multimap (m, Foldable.sum (fmap Nel.length m))
 
 -- | /O(k)/. A key is retained only if it is associated with a
 -- non-empty list of values.
 --
 -- > fromMap' (Map.fromList [(1, "ab"), (2, ""), (3, "c")]) === fromList [(1, 'a'), (1, 'b'), (3, 'c')]
 fromMap' :: Map k [a] -> Multimap k a
-fromMap' m = Multimap (Map.mapMaybe nonEmpty m, sum (fmap length m))
+fromMap' m = Multimap (Map.mapMaybe nonEmpty m, Foldable.sum (fmap List.length m))
 
 ------------------------------------------------------------------------------
 

@@ -123,4 +123,4 @@ module Data.Multimap.Table (
   ) where
 
 import Data.Multimap.Table.Internal
-import Prelude hiding (filter, foldl, foldr, lookup, map, null)
+import Prelude hiding (Foldable(..), filter, lookup, map)

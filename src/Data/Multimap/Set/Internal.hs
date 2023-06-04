@@ -110,11 +110,12 @@ module Data.Multimap.Set.Internal (
   , lookupGE
   ) where
 
-import Prelude hiding (filter, foldl, foldr, lookup, map, null)
+import Prelude hiding (Foldable(..), filter, lookup, map)
 
 import           Control.Arrow ((&&&))
 import qualified Control.Monad as List (filterM)
 import           Data.Data (Data)
+import           Data.Foldable (Foldable)
 import qualified Data.Foldable as Foldable
 import           Data.Functor.Classes
 import           Data.Map.Lazy (Map)
@@ -202,7 +203,7 @@ fromList = Foldable.foldr (uncurry insert) empty
 -- | /O(k)/. A key is retained only if it is associated with a
 -- non-empty set of values.
 fromMap :: Map k (Set a) -> SetMultimap k a
-fromMap m = SetMultimap (m', sum (fmap Set.size m'))
+fromMap m = SetMultimap (m', Foldable.sum (fmap Set.size m'))
   where
     m' = Map.filter (not . Set.null) m
 
@@ -724,7 +725,7 @@ partitionEithers = Set.foldr' (either left right) (Set.empty, Set.empty)
     right b (l,r) = (l, Set.insert b r)
 
 fromMap' :: Ord k => k -> Map k (Set a) -> SetMultimap k a
-fromMap' k m = SetMultimap (m', sum (fmap Set.size m'))
+fromMap' k m = SetMultimap (m', Foldable.sum (fmap Set.size m'))
   where
     m' = case Map.lookup k m of
       Just as | Set.null as -> Map.delete k m
