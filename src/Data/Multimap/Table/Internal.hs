@@ -111,13 +111,14 @@ module Data.Multimap.Table.Internal (
 
 import           Control.Arrow ((&&&))
 import           Data.Data (Data)
+import           Data.Foldable (Foldable)
 import qualified Data.Foldable as Foldable
 import           Data.Map (Map)
 import qualified Data.Map as Map
 import qualified Data.Maybe as Maybe
 import           Data.Set (Set)
 
-import Prelude hiding (filter, foldl, foldr, lookup, map, null)
+import Prelude hiding (Foldable(..), filter, lookup, map)
 
 infixl 9 !,!?
 
@@ -806,7 +807,7 @@ transpose' = Map.foldrWithKey' f Map.empty
     f r = Map.unionWith Map.union . Map.map (Map.singleton r)
 
 size' :: Map k1 (Map k2 a) -> Int
-size' = sum . fmap Map.size
+size' = Foldable.sum . fmap Map.size
 
 uncurry3 :: (a -> b -> c -> d) -> (a, b, c) -> d
 uncurry3 f ~(a, b, c) = f a b c

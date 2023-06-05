@@ -147,7 +147,7 @@ module Data.Multimap.Set (
 import Data.Multimap.Conversions
 import Data.Multimap.Internal (Multimap)
 import Data.Multimap.Set.Internal
-import Prelude hiding (filter, foldl, foldr, lookup, map, null)
+import Prelude hiding (Foldable(..), filter, lookup, map)
 
 -- | Convert a t'Data.Multimap.Multimap' to a t'Data.Multimap.Set.SetMultimap'.
 --

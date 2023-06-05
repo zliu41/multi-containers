@@ -149,7 +149,7 @@ module Data.Multimap (
 import Data.Multimap.Conversions
 import Data.Multimap.Internal
 import Data.Multimap.Set.Internal (SetMultimap)
-import Prelude hiding (filter, foldl, foldr, lookup, map, null)
+import Prelude hiding (Foldable(..), filter, lookup, map)
 
 -- | Convert a t'Data.Multimap.Set.SetMultimap' to a t'Data.Multimap.Multimap' where the values of each key
 -- are in ascending order.
